@@ -5,7 +5,7 @@ export class TapVisual{
     currentRadius: number;
     hasFinished: boolean;
     UPDATE_SPEED: number = 1000 / 60;
-    INCREMENT_SPEED: number = 2;
+    INCREMENT_SPEED: number = 1.5;
     lastTime: number; 
 
     constructor(x: number, y: number, maxRadius: number){

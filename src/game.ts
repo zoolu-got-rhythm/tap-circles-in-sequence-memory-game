@@ -2,6 +2,7 @@ import { BufferGeneric } from "./BufferGeneric";
 import { Coords2d } from "./Coords2d";
 import { ctx } from ".";
 import { TapVisual } from "./TapVisual";
+import { HittableCircle } from "./HittableCircle";
 
 function generateRandomPointWithinRect(width: number, height: number, boxPadding: number){
     const x = boxPadding + Math.round(Math.random() * (width - (boxPadding * 2)));
@@ -38,9 +39,11 @@ export class Game{
     tapVisuals: TapVisual[] = [];
     time: any;
     currentTime: any;
+    hittableCircles: HittableCircle[];
 
     constructor(){
         this.userTapsBuffer = new BufferGeneric(10);
+        this.hittableCircles = [];
     }
 
     gameOver(){
@@ -50,7 +53,19 @@ export class Game{
     init(){
         // start update loop here
         this.time = Date.now();
+        this.hittableCircles = generatePoints(400, 400, 4, 40).map(
+            (coords2d: Coords2d) => {
+                return new HittableCircle(coords2d, 40);
+            });
         this.update(); // start via window request animation frame instead?
+    }
+
+    processPointIfCollidesWithCircles(point: Coords2d){
+        this.hittableCircles.forEach((hittableCircle: HittableCircle, i: number) => {
+            if(point.getDistance(hittableCircle.coords2d) < hittableCircle.radius){
+                hittableCircle.isHit = true;
+            }
+        })
     }
 
     update(){
@@ -61,8 +76,10 @@ export class Game{
 
         if(this.userTapsBuffer.buffer.length > 0){
             const point: Coords2d | undefined = this.userTapsBuffer.get();
-            if(point)
+            if(point){
+                this.processPointIfCollidesWithCircles(point);
                 this.tapVisuals.push(new TapVisual(point.x, point.y, 20));
+            }
         }
 
         deleteFinishedTapVisuals(this.tapVisuals);
@@ -77,15 +94,32 @@ export class Game{
     draw(){
         draw2d(this);
     }
-
-    
 }
 
+
 function draw2d(game: Game){
+    ctx.save();
     ctx.clearRect(0, 0, 10000, 10000);
+    game.hittableCircles.forEach((hittableCircle: HittableCircle, i: number) => {
+        ctx.beginPath();
+        ctx.strokeStyle = "lime";
+        ctx.textAlign = "center";
+        ctx.lineWidth = 4;
+        if(hittableCircle.isHit){
+            ctx.font = '48px arial';
+            ctx.strokeText(i + 1, hittableCircle.coords2d.x, hittableCircle.coords2d.y);
+        }
+        
+
+        ctx.arc(hittableCircle.coords2d.x, hittableCircle.coords2d.y, 
+            hittableCircle.radius, 0, 2 * Math.PI);
+        ctx.stroke();
+    });
+
     game.tapVisuals.forEach((tapVisual: TapVisual, i) => {
         tapVisual.draw2dWeb(ctx);
     });
+    ctx.restore();
 }
 
 // deletes (mutuates original array) tap visual objects from array which are marked with hasFinished = true
