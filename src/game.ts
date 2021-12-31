@@ -40,23 +40,36 @@ export class Game{
     time: any;
     currentTime: any;
     hittableCircles: HittableCircle[];
+    legalHittableCircleIndex: number = 0;
+    gameOver: boolean = false;
+    maxMemorizeTime: number; // in milliseconds
+    startingMemorizeTime: number;
+    currentMemorizeTimeElapsed: number;
+    nOfHittableCircles: number; 
+    levelComplete: boolean;
 
-    constructor(){
+    constructor(maxMemorizeTime){
         this.userTapsBuffer = new BufferGeneric(10);
         this.hittableCircles = [];
-    }
-
-    gameOver(){
-
+        this.maxMemorizeTime = maxMemorizeTime;
+        this.startingMemorizeTime = 0;
+        this.currentMemorizeTimeElapsed = 0;
+        this.nOfHittableCircles = 2; // start game with just 2 hittable circles
+        this.levelComplete = false;
     }
 
     init(){
         // start update loop here
         this.time = Date.now();
-        this.hittableCircles = generatePoints(400, 400, 4, 40).map(
+        this.hittableCircles = generatePoints(400, 400, this.nOfHittableCircles, 40).map(
             (coords2d: Coords2d) => {
                 return new HittableCircle(coords2d, 40);
             });
+        this.legalHittableCircleIndex = 0;
+        this.gameOver = false;
+        this.startingMemorizeTime = Date.now();
+        this.currentMemorizeTimeElapsed = 0;
+        this.levelComplete = false;
         this.update(); // start via window request animation frame instead?
     }
 
@@ -64,20 +77,46 @@ export class Game{
         this.hittableCircles.forEach((hittableCircle: HittableCircle, i: number) => {
             if(point.getDistance(hittableCircle.coords2d) < hittableCircle.radius){
                 hittableCircle.isHit = true;
+
+                if(i == this.legalHittableCircleIndex){
+                    this.legalHittableCircleIndex++;
+                }else{
+                    this.gameOver = true;
+                }
+                
+                // win
+                if(this.legalHittableCircleIndex == this.hittableCircles.length){
+                    this.nOfHittableCircles++;
+                    this.levelComplete = true;
+                }
             }
         })
     }
 
     update(){
         this.draw();
+        if(this.gameOver){
+            window.alert("GAME OVER! refresh page to try again!");
+            return;
+        }
+
+        if(this.levelComplete){
+            return this.init();
+        }
+
+        // time
         const currentTime = Date.now();
         const delta = currentTime - this.time;
         this.time = currentTime;
 
+        this.currentMemorizeTimeElapsed = Date.now() - this.startingMemorizeTime;
+
         if(this.userTapsBuffer.buffer.length > 0){
             const point: Coords2d | undefined = this.userTapsBuffer.get();
             if(point){
-                this.processPointIfCollidesWithCircles(point);
+                if(this.currentMemorizeTimeElapsed > this.maxMemorizeTime){
+                    this.processPointIfCollidesWithCircles(point);
+                }
                 this.tapVisuals.push(new TapVisual(point.x, point.y, 20));
             }
         }
@@ -105,7 +144,7 @@ function draw2d(game: Game){
         ctx.strokeStyle = "lime";
         ctx.textAlign = "center";
         ctx.lineWidth = 4;
-        if(hittableCircle.isHit){
+        if(game.currentMemorizeTimeElapsed < game.maxMemorizeTime || hittableCircle.isHit){
             ctx.font = '48px arial';
             ctx.strokeText(i + 1, hittableCircle.coords2d.x, hittableCircle.coords2d.y);
         }

@@ -19,7 +19,7 @@ var ctx = c.getContext("2d");
 
 export {ctx};
 
-const game = new Game();
+const game = new Game(2000);
 
 
 function touchEvent(canvas, e){
