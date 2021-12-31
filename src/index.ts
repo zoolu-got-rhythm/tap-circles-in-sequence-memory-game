@@ -1,13 +1,5 @@
-// import { tapEffectModule } from "./tapEffect";
-// var c = document.getElementById("canvas");
-
 import { Coords2d } from "./Coords2d";
-import { deleteFinishedTapVisuals, Game, generatePoints } from "./game";
-import { TapVisual } from "./TapVisual";
-
-const circleRadius = 40;
-
-const points = generatePoints(400, 400, 4, circleRadius);
+import { Game } from "./game";
 
 var c = document.getElementById("canvas");
 // @ts-ignore
@@ -27,7 +19,6 @@ function touchEvent(canvas, e){
 
 // @ts-ignore
 c.addEventListener("click", function(e){touchEvent(c, e)});
-
 
 game.init();
 
