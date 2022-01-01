@@ -17,6 +17,13 @@ function touchEvent(canvas, e){
     game.userTapsBuffer.add(tapPosition);
 }
 
+const highScore = localStorage.getItem("score");
+console.log(highScore);
+if(highScore){
+    // @ts-ignore
+    document.getElementById("score").innerHTML += "high score = " + highScore;
+}
+
 // @ts-ignore
 c.addEventListener("click", function(e){touchEvent(c, e)});
 

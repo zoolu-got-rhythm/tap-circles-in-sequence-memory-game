@@ -82,6 +82,22 @@ export class Game{
                     this.legalHittableCircleIndex++;
                 }else{
                     this.gameOver = true;
+                    console.log("gameover");
+                    const score: string | null = localStorage.getItem("score");
+                    console.log(score);
+                    const scoreAsNumber: number | null = score ? Number(score) : null;
+
+                    if(!score){
+                        console.log("set score");
+                        localStorage.setItem("score", String(this.nOfHittableCircles - 1));
+                    }
+
+                    if(scoreAsNumber){
+                        console.log("update score");
+                        if(this.nOfHittableCircles > scoreAsNumber){
+                            localStorage.setItem("score", String(this.nOfHittableCircles - 1));
+                        }
+                    }
                 }
                 
                 // win
