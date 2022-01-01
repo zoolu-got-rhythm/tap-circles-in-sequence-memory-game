@@ -3,6 +3,7 @@ import { Coords2d } from "./Coords2d";
 import { ctx } from ".";
 import { TapVisual } from "./TapVisual";
 import { HittableCircle } from "./HittableCircle";
+import { ScoreStorage } from "./ScoreStorage";
 
 function generateRandomPointWithinRect(width: number, height: number, boxPadding: number){
     const x = boxPadding + Math.round(Math.random() * (width - (boxPadding * 2)));
@@ -47,8 +48,9 @@ export class Game{
     currentMemorizeTimeElapsed: number;
     nOfHittableCircles: number; 
     levelComplete: boolean;
+    scoreStorage: ScoreStorage;
 
-    constructor(maxMemorizeTime){
+    constructor(maxMemorizeTime, scoreStorage){
         this.userTapsBuffer = new BufferGeneric(10);
         this.hittableCircles = [];
         this.maxMemorizeTime = maxMemorizeTime;
@@ -56,6 +58,7 @@ export class Game{
         this.currentMemorizeTimeElapsed = 0;
         this.nOfHittableCircles = 2; // start game with just 2 hittable circles
         this.levelComplete = false;
+        this.scoreStorage = scoreStorage;
     }
 
     init(){
@@ -81,23 +84,9 @@ export class Game{
                 if(i == this.legalHittableCircleIndex){
                     this.legalHittableCircleIndex++;
                 }else{
+                    // gameover
                     this.gameOver = true;
-                    console.log("gameover");
-                    const score: string | null = localStorage.getItem("score");
-                    console.log(score);
-                    const scoreAsNumber: number | null = score ? Number(score) : null;
-
-                    if(!score){
-                        console.log("set score");
-                        localStorage.setItem("score", String(this.nOfHittableCircles - 1));
-                    }
-
-                    if(scoreAsNumber){
-                        console.log("update score");
-                        if(this.nOfHittableCircles > scoreAsNumber){
-                            localStorage.setItem("score", String(this.nOfHittableCircles - 1));
-                        }
-                    }
+                    this.scoreStorage.saveScore(this.nOfHittableCircles - 1);
                 }
                 
                 // win
