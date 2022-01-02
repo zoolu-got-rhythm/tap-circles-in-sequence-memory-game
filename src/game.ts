@@ -122,7 +122,7 @@ export class Game{
                 if(this.currentMemorizeTimeElapsed > this.maxMemorizeTime){
                     this.processPointIfCollidesWithCircles(point);
                 }
-                this.tapVisuals.push(new TapVisual(point.x, point.y, 20));
+                this.tapVisuals.push(new TapVisual(point.x, point.y, 15));
             }
         }
 
