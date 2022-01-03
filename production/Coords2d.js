@@ -1,0 +1,1 @@
+(()=>{var e=class{constructor(t,s){this.x=t,this.y=s}getInterpolatedCoords2d(t,s){let r=t.x-this.x,n=t.y-this.y;return new e(this.x+r*s,this.y+n*s)}getDistance(t){return Math.sqrt(Math.pow(this.x-t.x,2)+Math.pow(this.y-t.y,2))}};})();

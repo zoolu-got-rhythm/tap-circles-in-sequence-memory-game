@@ -5,7 +5,7 @@ export class TapVisual{
     currentRadius: number;
     hasFinished: boolean;
     UPDATE_SPEED: number = 1000 / 60;
-    INCREMENT_SPEED: number = 1.2;
+    INCREMENT_SPEED: number = 1.7;
     lastTime: number; 
     delta: number;
 
@@ -17,7 +17,6 @@ export class TapVisual{
         this.lastTime = Date.now();
         this.hasFinished = false;
         this.delta = 0;
-        console.log("new");
     }
 
     // examine logic here, something may be wrong
@@ -42,7 +41,7 @@ export class TapVisual{
         ctx.beginPath();
         ctx.strokeStyle = "cyan";
         ctx.lineWidth = 7;
-        ctx.arc(this.x, this.y, this.currentRadius * window.devicePixelRatio , 0, 2*Math.PI);
+        ctx.arc(this.x, this.y, this.currentRadius , 0, 2*Math.PI);
         ctx.stroke();  
     }
 }

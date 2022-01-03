@@ -1,0 +1,1 @@
+(()=>{var t=class{saveScore(e){let r=localStorage.getItem("score"),o=r?Number(r):null;r||localStorage.setItem("score",String(e)),o&&e>o&&localStorage.setItem("score",String(e))}getScore(){let e=localStorage.getItem("score");return e?Number(e):0}};})();

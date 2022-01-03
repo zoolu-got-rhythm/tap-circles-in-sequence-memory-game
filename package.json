@@ -16,7 +16,8 @@
   },
   
   "scripts": {
-    "start": "npx gulp"
+    "dev": "npx gulp runDevBuildTask",
+    "production": "npx gulp createProductionDistributionTask"
   }
 
   
