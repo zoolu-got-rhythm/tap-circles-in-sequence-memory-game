@@ -112,11 +112,8 @@ export class Game{
 
 
         if(this.gameOver && this.restart){
-            // window.alert("GAME OVER! refresh page to try again!");
-            // return;
             this.nOfHittableCircles = 2;
             return this.init();
-            // return this.init();
         }
 
         if(this.levelComplete){
@@ -158,15 +155,10 @@ export class Game{
     }
 }
 
-
-
-
 function draw2d(game: Game){
     ctx.save();
     ctx.clearRect(0, 0, 10000, 10000);
     
-
-
     game.hittableCircles.forEach((hittableCircle: HittableCircle, i: number) => {
         ctx.beginPath();
         ctx.strokeStyle = "lime";

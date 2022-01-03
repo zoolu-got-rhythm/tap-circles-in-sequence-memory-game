@@ -8,11 +8,21 @@ var ctx = c.getContext("2d");
 
 export {ctx};
 
+ctx.textAlign = "center";
+ctx.font = 'bold 28px arial';
+ctx.fillStyle = "lime";
+ctx.fillText("click to start", 200, 200);
+
 var memorizeC = document.getElementById("memorizeTime");
 // @ts-ignore
 var memorizeCtx = memorizeC.getContext("2d");
 
 const scoreLocalStorage = new ScoreLocalStorage();
+scoreLocalStorage.addScoreChangeListener(() => {
+    // @ts-ignore
+    document.getElementById("score").innerHTML += "high score = " + scoreLocalStorage.getScore();
+});
+
 const game = new Game(2500, scoreLocalStorage);
 
 game.addGameListener((game: Game) => {
@@ -51,5 +61,13 @@ document.getElementById("score").innerHTML += "high score = " + scoreLocalStorag
 // @ts-ignore
 c.addEventListener("click", function(e){touchEvent(c, e)});
 
-game.init();
+let gameStarted = false;
+// @ts-ignore
+c.addEventListener("click", function(e){
+    if(!gameStarted){
+        game.init();
+        gameStarted = true;
+    }
+})
+
 
