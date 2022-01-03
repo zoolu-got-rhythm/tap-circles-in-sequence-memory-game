@@ -18,7 +18,5 @@
   "scripts": {
     "dev": "npx gulp runDevBuildTask",
     "production": "npx gulp createProductionDistributionTask"
-  }
-
-  
+  }  
 }
