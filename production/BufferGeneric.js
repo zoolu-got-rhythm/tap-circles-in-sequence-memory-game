@@ -1,1 +1,0 @@
-(()=>{var f=class{constructor(e){this.buffer=[];this.bufferSize=e}add(e){this.buffer.length<this.bufferSize?this.buffer.push(e):(this.buffer.shift(),this.buffer.push(e))}get(){return this.buffer.shift()}};})();
