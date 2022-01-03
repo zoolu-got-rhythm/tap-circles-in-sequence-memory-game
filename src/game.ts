@@ -49,6 +49,7 @@ export class Game{
     nOfHittableCircles: number; 
     levelComplete: boolean;
     scoreStorage: ScoreStorage;
+    gameListeners: {(game: Game) : void}[];
 
     constructor(maxMemorizeTime, scoreStorage){
         this.userTapsBuffer = new BufferGeneric(10);
@@ -59,6 +60,7 @@ export class Game{
         this.nOfHittableCircles = 2; // start game with just 2 hittable circles
         this.levelComplete = false;
         this.scoreStorage = scoreStorage;
+        this.gameListeners = [];
     }
 
     init(){
@@ -100,6 +102,12 @@ export class Game{
 
     update(){
         this.draw();
+
+        this.gameListeners.forEach((gameListener) => {
+            gameListener(this);
+        })
+
+
         if(this.gameOver){
             window.alert("GAME OVER! refresh page to try again!");
             return;
@@ -138,7 +146,13 @@ export class Game{
     draw(){
         draw2d(this);
     }
+
+    addGameListener(listener: (game: Game) => void){
+        this.gameListeners.push(listener);
+    }
 }
+
+
 
 
 function draw2d(game: Game){
@@ -151,7 +165,7 @@ function draw2d(game: Game){
         ctx.lineWidth = 4;
         if(game.currentMemorizeTimeElapsed < game.maxMemorizeTime || hittableCircle.isHit){
             ctx.font = '48px arial';
-            ctx.strokeText(i + 1, hittableCircle.coords2d.x, hittableCircle.coords2d.y);
+            ctx.strokeText(i + 1, hittableCircle.coords2d.x, hittableCircle.coords2d.y + 12.5);
         }
         
 

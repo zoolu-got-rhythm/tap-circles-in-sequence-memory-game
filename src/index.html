@@ -7,21 +7,50 @@
         canvas{
             background: #111;
             cursor: pointer;
+            display: block;
+            margin: 0 auto;
+        }
+
+        #memorizeTime{
+            /* border-radius: 15px; */
+            margin-bottom: 5px;
         }
 
         *{
             text-align: center;
+            border-radius: 15px;
         }
+
+        h1{
+            margin-top: 25px;
+        }
+
+        footer{
+            margin-top: 10px;
+        }
+
+        #score{
+            font-weight: bold;
+        }
+
+
     </style>
 </head>
 <body>
 
-    <h1> brain/memory game </h1>
-    <p> tap circles in correct order to progress </p>
+    <h1> Monkey Memory Game 🙉 </h1>
+    <!-- <p> tap circles in correct order to progress </p> -->
     <p id="score"> </p>
-    <canvas id="canvas" width="400" height="400">
 
-    </canvas>
+    <canvas id="memorizeTime" width="400" height="25"> </canvas>
+    
+    <canvas id="canvas" width="400" height="400"> </canvas>
+
+    <footer> 
+        <a href="https://www.youtube.com/watch?v=ktkjUjcZid0&t=3s" target="_blank"> 
+            Inspired by the <em> Cognative Tradeoff Hypothesis </em> <br /> as seen in Mind Field s3.1 
+        </a>
+    </footer>
 
     <script src="../bundle/index.js"></script>
 
