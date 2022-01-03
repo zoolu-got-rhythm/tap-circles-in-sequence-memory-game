@@ -20,7 +20,7 @@ const buildProductionJsOutputDistributionFromTypeScriptFiles = () => {
 const writeIndexHtmlToProductionFolderChildProcessTask = async () => {
   await copyIndexHtmlToProductionFolder();
   await modifyIndexHtmlScriptSrcRef();
-  await removeIndexHtmlBackupCopy();
+  // await removeIndexHtmlBackupCopy();
 }
 
 const copyIndexHtmlToProductionFolder = async () => {
