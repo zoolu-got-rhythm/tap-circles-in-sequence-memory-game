@@ -50,6 +50,7 @@ export class Game{
     levelComplete: boolean;
     scoreStorage: ScoreStorage;
     gameListeners: {(game: Game) : void}[];
+    restart: boolean;
 
     constructor(maxMemorizeTime, scoreStorage){
         this.userTapsBuffer = new BufferGeneric(10);
@@ -61,10 +62,12 @@ export class Game{
         this.levelComplete = false;
         this.scoreStorage = scoreStorage;
         this.gameListeners = [];
+        this.restart = false;
     }
 
     init(){
         // start update loop here
+        this.restart = false;
         this.time = Date.now();
         this.hittableCircles = generatePoints(400, 400, this.nOfHittableCircles, 40).map(
             (coords2d: Coords2d) => {
@@ -108,9 +111,12 @@ export class Game{
         })
 
 
-        if(this.gameOver){
-            window.alert("GAME OVER! refresh page to try again!");
-            return;
+        if(this.gameOver && this.restart){
+            // window.alert("GAME OVER! refresh page to try again!");
+            // return;
+            this.nOfHittableCircles = 2;
+            return this.init();
+            // return this.init();
         }
 
         if(this.levelComplete){
@@ -127,7 +133,7 @@ export class Game{
         if(this.userTapsBuffer.buffer.length > 0){
             const point: Coords2d | undefined = this.userTapsBuffer.get();
             if(point){
-                if(this.currentMemorizeTimeElapsed > this.maxMemorizeTime){
+                if(this.currentMemorizeTimeElapsed > this.maxMemorizeTime && !this.gameOver){
                     this.processPointIfCollidesWithCircles(point);
                 }
                 this.tapVisuals.push(new TapVisual(point.x, point.y, 25));
@@ -158,6 +164,9 @@ export class Game{
 function draw2d(game: Game){
     ctx.save();
     ctx.clearRect(0, 0, 10000, 10000);
+    
+
+
     game.hittableCircles.forEach((hittableCircle: HittableCircle, i: number) => {
         ctx.beginPath();
         ctx.strokeStyle = "lime";
@@ -174,9 +183,18 @@ function draw2d(game: Game){
         ctx.stroke();
     });
 
+    if(game.gameOver){
+        ctx.strokeStyle = "red";
+        ctx.textAlign = "center";
+        ctx.lineWidth = 4;
+        ctx.font = '28px arial';
+        ctx.strokeText("game over, click to restart", 200, 200);
+    }
+
     game.tapVisuals.forEach((tapVisual: TapVisual, i) => {
         tapVisual.draw2dWeb(ctx);
     });
+
     ctx.restore();
 }
 

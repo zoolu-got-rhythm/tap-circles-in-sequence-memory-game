@@ -15,7 +15,6 @@ var memorizeCtx = memorizeC.getContext("2d");
 const scoreLocalStorage = new ScoreLocalStorage();
 const game = new Game(2500, scoreLocalStorage);
 
-memorizeCtx.textAlign = "center";
 game.addGameListener((game: Game) => {
     memorizeCtx.clearRect(0,0,10000,10000);
     memorizeCtx.fillStyle = "lime";
@@ -23,9 +22,10 @@ game.addGameListener((game: Game) => {
     if(game.currentMemorizeTimeElapsed / game.maxMemorizeTime < 1){
         memorizeCtx.fillRect(0,0, Math.ceil(400 * memorizeTimeAsFraction), 1000);
     }else{
-        memorizeCtx.fillRect(0,0, Math.ceil(400), 1000);
+        memorizeCtx.fillRect(0,0, 400, 1000);
     }
 
+    memorizeCtx.textAlign = "center";
     memorizeCtx.font = 'bold 25px arial';
     memorizeCtx.fillStyle = "white";
     // memorizeCtx.fo
@@ -33,7 +33,11 @@ game.addGameListener((game: Game) => {
 
 });
 
+
+
 function touchEvent(canvas, e){
+    if(game.gameOver)
+        game.restart = true;
     var rect = canvas.getBoundingClientRect();
     var x = e.clientX - rect.left;
     var y = e.clientY - rect.top;
@@ -41,10 +45,8 @@ function touchEvent(canvas, e){
     game.userTapsBuffer.add(tapPosition);
 }
 
-
 // @ts-ignore
 document.getElementById("score").innerHTML += "high score = " + scoreLocalStorage.getScore();
-
 
 // @ts-ignore
 c.addEventListener("click", function(e){touchEvent(c, e)});
