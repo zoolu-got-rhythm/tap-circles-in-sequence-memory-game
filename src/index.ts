@@ -20,7 +20,7 @@ var memorizeCtx = memorizeC.getContext("2d");
 const scoreLocalStorage = new ScoreLocalStorage();
 scoreLocalStorage.addScoreChangeListener(() => {
     // @ts-ignore
-    document.getElementById("score").innerHTML += "high score = " + scoreLocalStorage.getScore();
+    document.getElementById("score").innerHTML = "high score = " + scoreLocalStorage.getScore();
 });
 
 const game = new Game(2500, scoreLocalStorage);
@@ -40,7 +40,6 @@ game.addGameListener((game: Game) => {
     memorizeCtx.fillStyle = "white";
     // memorizeCtx.fo
     memorizeCtx.fillText("memorize time ⧖", 200, 21);
-
 });
 
 
