@@ -1,6 +1,17 @@
+import { features } from "process";
+import { Analytics } from "./Analytics";
 import { Coords2d } from "./Coords2d";
 import { Game } from "./game";
 import { ScoreLocalStorage } from "./ScoreLocalStorage";
+
+let analytics: Analytics;
+// if(features.toggle.analytics){
+//     analytics = new GoogleAnalyticsHelper();
+// }else{
+//     analytics = new EmptyAnalytics();
+// }
+
+// analytics.page();
 
 var c = document.getElementById("canvas");
 // @ts-ignore
@@ -21,6 +32,7 @@ const scoreLocalStorage = new ScoreLocalStorage();
 scoreLocalStorage.addScoreChangeListener(() => {
     // @ts-ignore
     document.getElementById("score").innerHTML = "high score = " + scoreLocalStorage.getScore();
+    // analytics.recordUserScore();
 });
 
 const game = new Game(2500, scoreLocalStorage);
