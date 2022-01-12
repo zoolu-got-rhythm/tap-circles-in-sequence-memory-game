@@ -8,12 +8,12 @@ import { ScoreLocalStorage } from "./ScoreLocalStorage";
 const scoreLocalStorage = new ScoreLocalStorage();
 let analyticsRecorder: AnalyticsRecorder;
 
-const appHostUrl = "https://relaxed-mestorf-a6193d.netlify.app/?fbclid=IwAR3s3TOY8dMshSKWovErQFUQGAM3MRwxFZ43aztiCmIY_zPXUk89k0CkfzA";
+// const appHostUrl = "https://relaxed-mestorf-a6193d.netlify.app/?fbclid=IwAR3s3TOY8dMshSKWovErQFUQGAM3MRwxFZ43aztiCmIY_zPXUk89k0CkfzA";
 
-fetch(`${appHostUrl}/featureToggle.json`)
-    .then(response => response.json())
-    .then(featureToggleDataObject => {
-        if(featureToggleDataObject.analytics){
+// fetch(`./featureToggle.json`)
+//     .then(response => response.json())
+//     .then(featureToggleDataObject => {
+        if(1){
             console.log("activating google analytics");
             analyticsRecorder = new GoogleAnalyticsRecorder(scoreLocalStorage);
         }else{
@@ -29,7 +29,7 @@ fetch(`${appHostUrl}/featureToggle.json`)
         
         analyticsRecorder.recordPageVisit(); // collect browser visited from aswell
         // and create a uuid for user and store in local storage or re-use if already exists
-    });
+    // });
 
 
 
