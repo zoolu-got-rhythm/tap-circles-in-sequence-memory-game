@@ -8,7 +8,9 @@ import { ScoreLocalStorage } from "./ScoreLocalStorage";
 const scoreLocalStorage = new ScoreLocalStorage();
 let analyticsRecorder: AnalyticsRecorder;
 
-fetch("./featureToggle.json")
+const appHostUrl = "https://relaxed-mestorf-a6193d.netlify.app/?fbclid=IwAR3s3TOY8dMshSKWovErQFUQGAM3MRwxFZ43aztiCmIY_zPXUk89k0CkfzA";
+
+fetch(`${appHostUrl}/featureToggle.json`)
     .then(response => response.json())
     .then(featureToggleDataObject => {
         if(featureToggleDataObject.analytics){
