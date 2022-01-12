@@ -17,5 +17,9 @@
   "scripts": {
     "dev": "npx gulp runDevBuildTask",
     "production": "npx gulp createProductionDistributionTask"
+  },
+  "dependencies": {
+    "@analytics/google-analytics": "^0.5.3",
+    "analytics": "^0.7.21"
   }
 }

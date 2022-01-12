@@ -1,9 +1,9 @@
 import { BufferGeneric } from "./BufferGeneric";
 import { Coords2d } from "./Coords2d";
-import { ctx } from ".";
+import { ctx } from "./index";
 import { TapVisual } from "./TapVisual";
 import { HittableCircle } from "./HittableCircle";
-import { ScoreStorage } from "./ScoreStorage";
+import { ScoreStorage } from "./interfaces/ScoreStorage";
 
 function generateRandomPointWithinRect(width: number, height: number, boxPadding: number){
     const x = boxPadding + Math.round(Math.random() * (width - (boxPadding * 2)));

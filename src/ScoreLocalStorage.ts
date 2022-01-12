@@ -1,4 +1,4 @@
-import { ScoreStorage } from "./ScoreStorage";
+import { ScoreStorage } from "./interfaces/ScoreStorage";
 
 export class ScoreLocalStorage implements ScoreStorage{
     scoreChangeListener: {() : void} | null;

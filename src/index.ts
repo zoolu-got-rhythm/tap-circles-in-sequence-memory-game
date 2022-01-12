@@ -1,17 +1,35 @@
 import { features } from "process";
-import { Analytics } from "./Analytics";
+import { AnalyticsRecorder } from "./interfaces/AnalyticsRecorder";
 import { Coords2d } from "./Coords2d";
 import { Game } from "./game";
+import { GoogleAnalyticsRecorder } from "./GoogleAnalyticsRecorder";
 import { ScoreLocalStorage } from "./ScoreLocalStorage";
 
-let analytics: Analytics;
-// if(features.toggle.analytics){
-//     analytics = new GoogleAnalyticsHelper();
-// }else{
-//     analytics = new EmptyAnalytics();
-// }
+const scoreLocalStorage = new ScoreLocalStorage();
+let analyticsRecorder: AnalyticsRecorder;
 
-// analytics.page();
+fetch("./featureToggle.json")
+    .then(response => response.json())
+    .then(featureToggleDataObject => {
+        if(featureToggleDataObject.analytics){
+            console.log("activating google analytics");
+            analyticsRecorder = new GoogleAnalyticsRecorder(scoreLocalStorage);
+        }else{
+            console.log("google analytics off");
+            // assign empty class implementation of Analytics interface if feature toggle for analytics is turned off - 
+            // this prevents me from having to write if or else statements everywhere in code, instead i can just write one initial -
+            // if/else statement at start here
+            analyticsRecorder = new class implements AnalyticsRecorder{
+                recordPageVisit(): void {}
+                recordUserScore(): void {}
+            };
+        }
+        
+        analyticsRecorder.recordPageVisit(); // collect browser visited from aswell
+        // and create a uuid for user and store in local storage or re-use if already exists
+    });
+
+
 
 var c = document.getElementById("canvas");
 // @ts-ignore
@@ -28,11 +46,10 @@ var memorizeC = document.getElementById("memorizeTime");
 // @ts-ignore
 var memorizeCtx = memorizeC.getContext("2d");
 
-const scoreLocalStorage = new ScoreLocalStorage();
 scoreLocalStorage.addScoreChangeListener(() => {
     // @ts-ignore
     document.getElementById("score").innerHTML = "high score = " + scoreLocalStorage.getScore();
-    // analytics.recordUserScore();
+    analyticsRecorder.recordUserScore();
 });
 
 const game = new Game(2500, scoreLocalStorage);
@@ -42,7 +59,7 @@ game.addGameListener((game: Game) => {
     memorizeCtx.fillStyle = "lime";
     const memorizeTimeAsFraction = game.currentMemorizeTimeElapsed / game.maxMemorizeTime;
     if(game.currentMemorizeTimeElapsed / game.maxMemorizeTime < 1){
-        memorizeCtx.fillRect(0,0, Math.ceil(400 * memorizeTimeAsFraction), 1000);
+        memorizeCtx.fillRect(0,0, 400 * memorizeTimeAsFraction, 1000);
     }else{
         memorizeCtx.fillRect(0,0, 400, 1000);
     }
