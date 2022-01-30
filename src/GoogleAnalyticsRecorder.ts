@@ -21,7 +21,7 @@ export class GoogleAnalyticsRecorder implements AnalyticsRecorder{
 
     recordPageVisit(): void {
         /* Track a page view */
-        this.analytics.page()
+        this.analytics.page();
     }
     recordUserScore(): void {
         /* Track a custom event */
